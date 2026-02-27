@@ -20,13 +20,20 @@ export const SYSTEM_PROMPT = `Role
  理解用户意图后立即调用相应工具
  
  工具调用格式：
- {
- "method": "tools/call",
- "params": {
- "name": "工具名称",
- "arguments": {"参数": "值"}
- }
- }
+{
+  "role": "assistant",
+  "content": "执行进度或意图说明",
+  "tool_calls": [
+    {
+      "id": "唯一标识符",
+      "type": "function",
+      "function": {
+        "name": "工具名称",
+        "arguments": "{\"参数1\": 值1, \"参数2\": 值2}"
+      }
+    }
+  ]
+}
  
  并发调用：可同时调用多个工具获取不同维度信息
  
@@ -36,7 +43,7 @@ export const SYSTEM_PROMPT = `Role
  自然语言描述，友好语气
  POI使用 <ref>ID</ref> 引用
  包含关键信息：名称、地址、评分、价格、特色
- 图片URL单独一行输出
+ 图片URL单独一行输出，使用markdown格式
  工作流程
  搜索 → 2. 筛选 → 3. 获取详情 → 4. 整合输出
  注意事项

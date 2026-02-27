@@ -1,10 +1,5 @@
 "use server";
-import {
-  createClient,
-  executeRequest,
-  listTools,
-  removeClient,
-} from "./client";
+import { createClient, executeRequest, listTools, removeClient } from "./client";
 import { MCPClientLogger } from "./logger";
 import {
   DEFAULT_MCP_CONFIG,
@@ -17,6 +12,10 @@ import {
 import fs from "fs/promises";
 import path from "path";
 import { getServerSideConfig } from "../config/server";
+
+// 日志文件路径
+const LOG_DIR = path.join(process.cwd(), "logs");
+const MCP_LOG_FILE = path.join(LOG_DIR, "mcp.log");
 
 const logger = new MCPClientLogger("MCP Actions");
 const CONFIG_PATH = path.join(process.cwd(), "app/mcp/mcp_config.json");
@@ -354,6 +353,9 @@ export async function executeMcpAction(
   clientId: string,
   request: McpRequestMessage,
 ) {
+  let result: any = null;
+  let error: Error | null = null;
+  
   try {
     // 首先尝试使用提供的clientId
     let client = clientsMap.get(clientId);
@@ -391,10 +393,15 @@ export async function executeMcpAction(
     }
     
     logger.info(`Executing request for [${targetClientId}]`);
-    return await executeRequest(client.client, request);
-  } catch (error) {
+    result = await executeRequest(client.client, request);
+    return result;
+  } catch (err) {
+    error = err instanceof Error ? err : new Error(String(err));
     logger.error(`Failed to execute request for [${clientId}]: ${error}`);
     throw error;
+  } finally {
+    // 记录 MCP 调用
+    await logMcpCall(clientId, request, result, error);
   }
 }
 
@@ -417,6 +424,34 @@ async function updateMcpConfig(config: McpConfigData): Promise<void> {
     await fs.writeFile(CONFIG_PATH, JSON.stringify(config, null, 2));
   } catch (error) {
     throw error;
+  }
+}
+
+// 记录 MCP 调用日志
+async function logMcpCall(clientId: string, request: McpRequestMessage, result: any, error: Error | null) {
+  try {
+    // 确保日志目录存在
+    await fs.mkdir(LOG_DIR, { recursive: true });
+    
+    // 构建日志条目
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      clientId,
+      request,
+      result: error ? null : result,
+      error: error ? {
+        message: error.message,
+        stack: error.stack
+      } : null
+    };
+    
+    // 追加到日志文件
+    await fs.appendFile(MCP_LOG_FILE, JSON.stringify(logEntry) + "\n");
+    
+    // 控制台日志
+    logger.info(`MCP call logged for ${clientId}`);
+  } catch (logError) {
+    logger.error(`Failed to log MCP call: ${logError}`);
   }
 }
 

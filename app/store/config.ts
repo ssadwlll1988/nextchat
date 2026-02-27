@@ -57,22 +57,22 @@ export const DEFAULT_CONFIG = {
 
   disablePromptHint: false,
 
-  dontShowMaskSplashScreen: false, // dont show splash screen when create chat
-  hideBuiltinMasks: false, // dont add builtin masks
+  dontShowMaskSplashScreen: true, // dont show splash screen when create chat
+  hideBuiltinMasks: true, // dont add builtin masks
 
   customModels: "",
   models: DEFAULT_MODELS as any as LLMModel[],
 
   modelConfig: {
-    model: "glm-5" as ModelType,
-    providerName: "ChatGLM" as ServiceProvider,
+    model: "qwen3-max" as ModelType,
+    providerName: "Alibaba" as ServiceProvider,
     temperature: 0.5,
     top_p: 1,
     max_tokens: 40000,
     presence_penalty: 0,
     frequency_penalty: 0,
     sendMemory: true,
-    historyMessageCount: 4,
+    historyMessageCount: 10,
     compressMessageLengthThreshold: 1000,
     compressModel: "",
     compressProviderName: "",

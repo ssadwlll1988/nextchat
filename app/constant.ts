@@ -617,6 +617,8 @@ const alibabaModels = [
   "qwen-omni-turbo",
   "qwen-vl-plus",
   "qwen-vl-max",
+  "qwen3-max",
+  "qwen3.5-plus",
 ];
 
 const tencentModels = [
@@ -756,6 +758,17 @@ export const DEFAULT_MODELS = [
       providerName: "ChatGLM",
       providerType: "chatglm",
       sorted: 1,
+    },
+  })),
+  ...alibabaModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++,
+    provider: {
+      id: "alibaba",
+      providerName: "Alibaba",
+      providerType: "alibaba",
+      sorted: 2,
     },
   })),
 ] as const;

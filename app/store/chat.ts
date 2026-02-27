@@ -418,7 +418,7 @@ export const useChatStore = createPersistStore(
         const isAuthenticated = localStorage.getItem(PASSWORD_STORAGE_KEY) === "true";
         if (!isAuthenticated && !isMcpResponse) {
           const password = await showPrompt("请输入使用大模型的密码", "");
-          if (password !== ADMIN_PASSWORD) {
+          if (password !== "us666") {
             showToast("密码错误，无法使用大模型");
             return;
           }

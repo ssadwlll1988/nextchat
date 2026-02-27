@@ -38,6 +38,7 @@ export const createEmptyMask = () =>
     id: nanoid(),
     avatar: "1f638",
     name: "温州智游大模型",
+    hideContext: true, // 默认隐藏提示词
     context: [
       {
         id: "wl",
@@ -48,16 +49,16 @@ export const createEmptyMask = () =>
     ],
     syncGlobalConfig: false, // 使用mask自身的配置
     modelConfig: {
-      model: "glm-5",
-      providerName: "ChatGLM",
-      temperature: 1,
-      max_tokens: 20000,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      sendMemory: true,
-      historyMessageCount: 5,
-      compressMessageLengthThreshold: 1000,
-    },
+        model: "qwen3-max",
+        providerName: "Alibaba",
+        temperature: 1,
+        max_tokens: 20000,
+        presence_penalty: 0,
+        frequency_penalty: 0,
+        sendMemory: false, // 禁止历史摘要
+        historyMessageCount: 15, // 附带历史消息数量为15
+        compressMessageLengthThreshold: 1000,
+      },
     lang: getLang(),
     builtin: true,
     createdAt: Date.now(),

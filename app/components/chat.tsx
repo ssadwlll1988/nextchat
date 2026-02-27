@@ -1387,8 +1387,12 @@ function _Chat() {
     Math.max(0, renderMessages.length - CHAT_PAGE_SIZE),
   );
 
+  // 当消息数量变化时，更新msgRenderIndex以确保显示完整的消息列表
+  useEffect(() => {
+    setMsgRenderIndex(Math.max(0, renderMessages.length - CHAT_PAGE_SIZE));
+  }, [renderMessages.length]);
+
   function setMsgRenderIndex(newIndex: number) {
-    newIndex = Math.min(renderMessages.length - CHAT_PAGE_SIZE, newIndex);
     newIndex = Math.max(0, newIndex);
     _setMsgRenderIndex(newIndex);
   }
@@ -1410,8 +1414,8 @@ function _Chat() {
     const isHitBottom =
       bottomHeight >= e.scrollHeight - (isMobileScreen ? 4 : 10);
 
-    const prevPageMsgIndex = msgRenderIndex - CHAT_PAGE_SIZE;
-    const nextPageMsgIndex = msgRenderIndex + CHAT_PAGE_SIZE;
+    const prevPageMsgIndex = Math.max(0, msgRenderIndex - CHAT_PAGE_SIZE);
+    const nextPageMsgIndex = Math.min(renderMessages.length - CHAT_PAGE_SIZE, msgRenderIndex + CHAT_PAGE_SIZE);
 
     if (isTouchTopEdge && !isTouchBottomEdge) {
       setMsgRenderIndex(prevPageMsgIndex);
