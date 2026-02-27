@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "servers": [
+    {
+      "id": "network-mcp",
+      "name": "Network MCP",
+      "url": "http://1.117.230.3:8081/sse",
+      "transport": "sse",
+      "status": "active",
+      "config": {}
+    }
+  ]
+}
