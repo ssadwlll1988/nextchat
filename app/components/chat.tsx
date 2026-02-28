@@ -474,14 +474,12 @@ function useScrollToBottom(
     }
   });
 
-  // auto scroll when messages length changes
-  const lastMessagesLength = useRef(messages.length);
+  // auto scroll when messages length changes or content changes
   useEffect(() => {
-    if (messages.length > lastMessagesLength.current && !detach) {
+    if (!detach) {
       scrollDomToBottom();
     }
-    lastMessagesLength.current = messages.length;
-  }, [messages.length, detach, scrollDomToBottom]);
+  }, [messages, detach, scrollDomToBottom]);
 
   return {
     scrollRef,
@@ -1025,7 +1023,7 @@ function _Chat() {
   // if user is not typing, should auto scroll to bottom only if already at bottom
   const { setAutoScroll, scrollDomToBottom } = useScrollToBottom(
     scrollRef,
-    (isScrolledToBottom || isAttachWithTop) && !isTyping,
+    false, // 始终允许自动滚动，确保AI回复时能自动滚动到底部
     session.messages,
   );
   const [hitBottom, setHitBottom] = useState(true);
@@ -1713,7 +1711,9 @@ function _Chat() {
               {!session.topic ? DEFAULT_TOPIC : session.topic}
             </div>
             <div className="window-header-sub-title">
-              {Locale.Chat.SubTitle(session.messages.length)}
+              {Locale.Chat.SubTitle(session.messages.filter(msg => 
+                !msg.tools && !msg.isMcpResponse && msg.role !== "tool"
+              ).length)}
             </div>
           </div>
           <div className="window-actions">
@@ -1871,7 +1871,7 @@ function _Chat() {
                             </div>
                             {!isUser && (
                               <div className={styles["chat-model-name"]}>
-                                {message.model}
+                                {session.mask.name}
                               </div>
                             )}
 

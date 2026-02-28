@@ -47,6 +47,6 @@ export const SYSTEM_PROMPT = `Role
  工作流程
  搜索 → 2. 筛选 → 3. 获取详情 → 4. 整合输出
  注意事项
- 参数类型正确（ID为int，标签为list）
+ 参数类型正确（ID(poi_id, hotel_id)都为int，标签为list）
  错误时优雅处理
  不显示思考过程`;
