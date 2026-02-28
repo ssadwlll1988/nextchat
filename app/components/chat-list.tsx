@@ -145,7 +145,7 @@ export function ChatList(props: { narrow?: boolean }) {
                 title={item.topic}
                 time={new Date(item.lastUpdate).toLocaleString()}
                 count={item.messages.filter(msg => 
-                  !msg.tools && !msg.isMcpResponse && msg.role !== "tool"
+                  !msg.tools && !msg.isMcpResponse
                 ).length}
                 key={item.id}
                 id={item.id}

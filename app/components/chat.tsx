@@ -1712,7 +1712,7 @@ function _Chat() {
             </div>
             <div className="window-header-sub-title">
               {Locale.Chat.SubTitle(session.messages.filter(msg => 
-                !msg.tools && !msg.isMcpResponse && msg.role !== "tool"
+                !msg.tools && !msg.isMcpResponse
               ).length)}
             </div>
           </div>
