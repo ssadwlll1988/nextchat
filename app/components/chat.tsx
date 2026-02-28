@@ -473,7 +473,7 @@ function useScrollToBottom(
       scrollDomToBottom();
     }
   });
-
+ 
   // auto scroll when messages length changes or content changes
   useEffect(() => {
     if (!detach) {
